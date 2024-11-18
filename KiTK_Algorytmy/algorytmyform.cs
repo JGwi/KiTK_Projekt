@@ -34,6 +34,7 @@ namespace KiTK_Algorytmy
 
         private void btnSzyfrAES_Click(object sender, EventArgs e)
         {
+
             byte[] salt = GenerateSalt();
             var localLink = Path.ChangeExtension(szukajOknoText.Text, ".aes");
             FileStream fs = new FileStream(localLink, FileMode.Create);
@@ -50,8 +51,16 @@ namespace KiTK_Algorytmy
             var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
             aes.Key = key.GetBytes(aes.KeySize / 8);
             aes.IV = key.GetBytes(aes.BlockSize / 8);
+
+            // 1. Zapisanie identyfikatora algorytmu
+            string algorithmIdentifier = "AES"; // Identyfikator algorytmu
+            byte[] algorithmBytes = Encoding.UTF8.GetBytes(algorithmIdentifier.PadRight(8, '\0')); // 8 bajtów nagłówka
+            fs.Write(algorithmBytes, 0, algorithmBytes.Length); // Zapis identyfikatora
+
+            // 2. Zapisanie soli
             fs.Write(salt, 0, salt.Length);
 
+            // 3. Zapisanie rozszerzenia pliku
             string fileExtension = Path.GetExtension(szukajOknoText.Text);
             byte[] extensionBytes = Encoding.UTF8.GetBytes(fileExtension);
             fs.WriteByte((byte)extensionBytes.Length); // Zapis długości rozszerzenia
@@ -89,12 +98,6 @@ namespace KiTK_Algorytmy
                 {
                     zaszyfrowanyText.Text = sr.ReadToEnd();
                 }
-
-                /*if (File.Exists(szukajOknoText.Text))
-                {
-                    File.Delete(szukajOknoText.Text);
-                    szukajOknoText.Text = string.Empty;
-                }*/
             }
         }
 
@@ -109,67 +112,82 @@ namespace KiTK_Algorytmy
         }
 
         private void btnDeszyfrAES_Click(object sender, EventArgs e)
+{
+    string encryptedFile = szukajOknoText.Text;
+    if (!File.Exists(encryptedFile))
+    {
+        MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
+        return;
+    }
 
+    using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
+    {
+        // 1. Odczytanie i weryfikacja identyfikatora algorytmu
+        byte[] algorithmBytes = new byte[8]; // 8 bajtów identyfikatora
+        fsIn.Read(algorithmBytes, 0, algorithmBytes.Length);
+        string algorithmIdentifier = Encoding.UTF8.GetString(algorithmBytes).Trim('\0');
+
+        // Sprawdzenie, czy użyto algorytmu AES
+        if (algorithmIdentifier != "AES")
         {
-            string encryptedFile = szukajOknoText.Text;
-            if (!File.Exists(encryptedFile))
+            MessageBox.Show($"Nieprawidłowy algorytm szyfrowania: {algorithmIdentifier}. Oczekiwano: AES.");
+            return; // Zakończ deszyfrowanie, jeśli algorytm się nie zgadza
+        }
+
+        // 2. Odczytanie soli
+        byte[] salt = new byte[32];
+        fsIn.Read(salt, 0, salt.Length);
+
+        // 3. Odczytanie rozszerzenia pliku
+        int extensionLength = fsIn.ReadByte(); 
+        byte[] extensionBytes = new byte[extensionLength];
+        fsIn.Read(extensionBytes, 0, extensionLength);
+        string originalExtension = Encoding.UTF8.GetString(extensionBytes);
+
+        // 4. Przygotowanie nazwy pliku odszyfrowanego
+        string decryptedFile = Path.ChangeExtension(encryptedFile, originalExtension);
+
+        // 5. Przygotowanie klucza AES
+        byte[] passwordBytes = Encoding.Unicode.GetBytes(_password);
+        RijndaelManaged aes = new RijndaelManaged
+        {
+            KeySize = 256,
+            BlockSize = 128,
+            Padding = PaddingMode.PKCS7,
+            Mode = CipherMode.CFB
+        };
+
+        var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
+        aes.Key = key.GetBytes(aes.KeySize / 8);
+        aes.IV = key.GetBytes(aes.BlockSize / 8);
+
+        // 6. Proces deszyfrowania
+        using (CryptoStream cs = new CryptoStream(fsIn, aes.CreateDecryptor(), CryptoStreamMode.Read))
+        using (FileStream fsOut = new FileStream(decryptedFile, FileMode.Create))
+        {
+            byte[] buffer = new byte[108576];
+            int read;
+            try
             {
-                MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
-                return;
-            }
-
-            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
-            {
-                byte[] salt = new byte[32];
-                fsIn.Read(salt, 0, salt.Length);
-
-                int extensionLength = fsIn.ReadByte(); 
-                byte[] extensionBytes = new byte[extensionLength];
-                fsIn.Read(extensionBytes, 0, extensionLength);
-                string originalExtension = Encoding.UTF8.GetString(extensionBytes);
-
-                string decryptedFile = Path.ChangeExtension(encryptedFile, originalExtension);
-
-                byte[] passwordBytes = Encoding.Unicode.GetBytes(_password);
-                RijndaelManaged aes = new RijndaelManaged
+                while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    KeySize = 256,
-                    BlockSize = 128,
-                    Padding = PaddingMode.PKCS7,
-                    Mode = CipherMode.CFB
-                };
-
-                var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
-                aes.Key = key.GetBytes(aes.KeySize / 8);
-                aes.IV = key.GetBytes(aes.BlockSize / 8);
-
-                using (CryptoStream cs = new CryptoStream(fsIn, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                using (FileStream fsOut = new FileStream(decryptedFile, FileMode.Create))
-                {
-                    byte[] buffer = new byte[108576];
-                    int read;
-                    try
-                    {
-                        while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            fsOut.Write(buffer, 0, read);
-                        }
-
-                        MessageBox.Show("Plik został odszyfrowany jako: " + decryptedFile);
-                    }
-                    catch (CryptographicException ex)
-                    {
-                        MessageBox.Show("Błąd deszyfrowania: " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Nieoczekiwany błąd: " + ex.Message);
-                    }
+                    fsOut.Write(buffer, 0, read);
                 }
 
-
+                MessageBox.Show("Plik został odszyfrowany jako: " + decryptedFile);
+            }
+            catch (CryptographicException ex)
+            {
+                MessageBox.Show("Błąd deszyfrowania: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nieoczekiwany błąd: " + ex.Message);
             }
         }
+    }
+}
+
 
         private void btnSzyfrDES_Click(object sender, EventArgs e)
         {
@@ -190,6 +208,10 @@ namespace KiTK_Algorytmy
             byte[] key = passwordBytes.Take(8).ToArray();
             des.Key = key;
             des.IV = key;
+
+            // Dodanie identyfikatora algorytmu
+            byte[] algorithmBytes = Encoding.UTF8.GetBytes("DES".PadRight(8, '\0')); // 8-bajtowy identyfikator
+            fs.Write(algorithmBytes, 0, algorithmBytes.Length);
 
             // Zapis soli
             fs.Write(salt, 0, salt.Length);
@@ -220,6 +242,7 @@ namespace KiTK_Algorytmy
             }
         }
 
+
         private void btnDeszyfrDES_Click(object sender, EventArgs e)
         {
             string encryptedFile = szukajOknoText.Text;
@@ -231,6 +254,19 @@ namespace KiTK_Algorytmy
 
             using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
             {
+                // Odczyt identyfikatora algorytmu
+                byte[] algorithmBytes = new byte[8]; // 8 bajtów identyfikatora
+                fsIn.Read(algorithmBytes, 0, algorithmBytes.Length);
+                string algorithmIdentifier = Encoding.UTF8.GetString(algorithmBytes).Trim('\0');
+
+                // Weryfikacja identyfikatora
+                if (algorithmIdentifier != "DES")
+                {
+                    MessageBox.Show($"Nieprawidłowy algorytm szyfrowania: {algorithmIdentifier}. Oczekiwano: DES.");
+                    return; // Zakończ deszyfrowanie, jeśli algorytm się nie zgadza
+                }
+
+                // Odczyt soli
                 byte[] salt = new byte[32];
                 fsIn.Read(salt, 0, salt.Length);
 
@@ -271,6 +307,7 @@ namespace KiTK_Algorytmy
                 }
             }
         }
+
 
     }
 }

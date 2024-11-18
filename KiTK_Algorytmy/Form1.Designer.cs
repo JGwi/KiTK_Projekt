@@ -52,7 +52,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1024, 50);
+            this.panel1.Size = new System.Drawing.Size(1366, 50);
             this.panel1.TabIndex = 0;
             // 
             // btnClose
@@ -64,7 +64,7 @@
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btnClose.ForeColor = System.Drawing.Color.White;
             this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClose.Location = new System.Drawing.Point(975, 5);
+            this.btnClose.Location = new System.Drawing.Point(1317, 5);
             this.btnClose.Margin = new System.Windows.Forms.Padding(0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(40, 40);
@@ -168,17 +168,18 @@
             // 
             // mainpanel
             // 
+            this.mainpanel.BackColor = System.Drawing.SystemColors.Control;
             this.mainpanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainpanel.Location = new System.Drawing.Point(272, 50);
             this.mainpanel.Name = "mainpanel";
-            this.mainpanel.Size = new System.Drawing.Size(752, 718);
+            this.mainpanel.Size = new System.Drawing.Size(1094, 718);
             this.mainpanel.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1366, 768);
             this.Controls.Add(this.mainpanel);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);

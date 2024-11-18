@@ -35,6 +35,8 @@
             this.btnSzyfrAES = new System.Windows.Forms.Button();
             this.btnDeszyfrAES = new System.Windows.Forms.Button();
             this.btnSzukaj = new System.Windows.Forms.Button();
+            this.btnDeszyfrDES = new System.Windows.Forms.Button();
+            this.btnSzyfrDES = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -124,12 +126,48 @@
             this.btnSzukaj.UseVisualStyleBackColor = false;
             this.btnSzukaj.Click += new System.EventHandler(this.btnSzukaj_Click);
             // 
+            // btnDeszyfrDES
+            // 
+            this.btnDeszyfrDES.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(29)))));
+            this.btnDeszyfrDES.FlatAppearance.BorderSize = 0;
+            this.btnDeszyfrDES.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeszyfrDES.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnDeszyfrDES.ForeColor = System.Drawing.Color.White;
+            this.btnDeszyfrDES.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDeszyfrDES.Location = new System.Drawing.Point(757, 640);
+            this.btnDeszyfrDES.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.btnDeszyfrDES.Name = "btnDeszyfrDES";
+            this.btnDeszyfrDES.Size = new System.Drawing.Size(160, 60);
+            this.btnDeszyfrDES.TabIndex = 14;
+            this.btnDeszyfrDES.Text = "Deszyfruj DES\nTryb blokowy";
+            this.btnDeszyfrDES.UseVisualStyleBackColor = false;
+            this.btnDeszyfrDES.Click += new System.EventHandler(this.btnDeszyfrDES_Click);
+            // 
+            // btnSzyfrDES
+            // 
+            this.btnSzyfrDES.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(29)))));
+            this.btnSzyfrDES.FlatAppearance.BorderSize = 0;
+            this.btnSzyfrDES.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSzyfrDES.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnSzyfrDES.ForeColor = System.Drawing.Color.White;
+            this.btnSzyfrDES.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSzyfrDES.Location = new System.Drawing.Point(347, 640);
+            this.btnSzyfrDES.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.btnSzyfrDES.Name = "btnSzyfrDES";
+            this.btnSzyfrDES.Size = new System.Drawing.Size(160, 60);
+            this.btnSzyfrDES.TabIndex = 13;
+            this.btnSzyfrDES.Text = "Szyfruj DES\r\nTryb blokowy";
+            this.btnSzyfrDES.UseVisualStyleBackColor = false;
+            this.btnSzyfrDES.Click += new System.EventHandler(this.btnSzyfrDES_Click);
+            // 
             // algorytmyform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1094, 718);
+            this.Controls.Add(this.btnDeszyfrDES);
+            this.Controls.Add(this.btnSzyfrDES);
             this.Controls.Add(this.btnSzukaj);
             this.Controls.Add(this.btnDeszyfrAES);
             this.Controls.Add(this.btnSzyfrAES);
@@ -154,5 +192,7 @@
         private System.Windows.Forms.Button btnSzyfrAES;
         private System.Windows.Forms.Button btnDeszyfrAES;
         private System.Windows.Forms.Button btnSzukaj;
+        private System.Windows.Forms.Button btnDeszyfrDES;
+        private System.Windows.Forms.Button btnSzyfrDES;
     }
 }

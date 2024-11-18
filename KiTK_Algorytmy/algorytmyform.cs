@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -51,6 +52,11 @@ namespace KiTK_Algorytmy
             aes.IV = key.GetBytes(aes.BlockSize / 8);
             fs.Write(salt, 0, salt.Length);
 
+            string fileExtension = Path.GetExtension(szukajOknoText.Text);
+            byte[] extensionBytes = Encoding.UTF8.GetBytes(fileExtension);
+            fs.WriteByte((byte)extensionBytes.Length); // Zapis długości rozszerzenia
+            fs.Write(extensionBytes, 0, extensionBytes.Length);
+
             CryptoStream cs = new CryptoStream(fs, aes.CreateEncryptor(), CryptoStreamMode.Write);
             FileStream fsIn = new FileStream(szukajOknoText.Text, FileMode.Open);
 
@@ -84,11 +90,11 @@ namespace KiTK_Algorytmy
                     zaszyfrowanyText.Text = sr.ReadToEnd();
                 }
 
-                if (File.Exists(szukajOknoText.Text))
+                /*if (File.Exists(szukajOknoText.Text))
                 {
                     File.Delete(szukajOknoText.Text);
                     szukajOknoText.Text = string.Empty;
-                }
+                }*/
             }
         }
 
@@ -103,23 +109,26 @@ namespace KiTK_Algorytmy
         }
 
         private void btnDeszyfrAES_Click(object sender, EventArgs e)
+
         {
             string encryptedFile = szukajOknoText.Text;
-
             if (!File.Exists(encryptedFile))
             {
                 MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
                 return;
             }
 
-            string decryptedFile = Path.ChangeExtension(encryptedFile, ".decrypted");
-
-            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open)) ;
-
             using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
             {
                 byte[] salt = new byte[32];
                 fsIn.Read(salt, 0, salt.Length);
+
+                int extensionLength = fsIn.ReadByte(); 
+                byte[] extensionBytes = new byte[extensionLength];
+                fsIn.Read(extensionBytes, 0, extensionLength);
+                string originalExtension = Encoding.UTF8.GetString(extensionBytes);
+
+                string decryptedFile = Path.ChangeExtension(encryptedFile, originalExtension);
 
                 byte[] passwordBytes = Encoding.Unicode.GetBytes(_password);
                 RijndaelManaged aes = new RijndaelManaged
@@ -146,7 +155,7 @@ namespace KiTK_Algorytmy
                             fsOut.Write(buffer, 0, read);
                         }
 
-                        MessageBox.Show("Plik został pomyślnie odszyfrowany jako: " + decryptedFile);
+                        MessageBox.Show("Plik został odszyfrowany jako: " + decryptedFile);
                     }
                     catch (CryptographicException ex)
                     {
@@ -158,14 +167,110 @@ namespace KiTK_Algorytmy
                     }
                 }
 
+
             }
-            if(File.Exists(decryptedFile))
+        }
+
+        private void btnSzyfrDES_Click(object sender, EventArgs e)
+        {
+            byte[] salt = GenerateSalt();
+            var localLink = szukajOknoText.Text + ".des";
+            FileStream fs = new FileStream(localLink, FileMode.Create);
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(_password);
+
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider
             {
-                using (StreamReader sr = new StreamReader(decryptedFile))
+                KeySize = 64,
+                BlockSize = 64,
+                Padding = PaddingMode.PKCS7,
+                Mode = CipherMode.CFB
+            };
+
+            // Skrócenie hasła do 8 bajtów (efektywny klucz DES)
+            byte[] key = passwordBytes.Take(8).ToArray();
+            des.Key = key;
+            des.IV = key;
+
+            // Zapis soli
+            fs.Write(salt, 0, salt.Length);
+
+            CryptoStream cs = new CryptoStream(fs, des.CreateEncryptor(), CryptoStreamMode.Write);
+            FileStream fsIn = new FileStream(szukajOknoText.Text, FileMode.Open);
+
+            byte[] buffer = new byte[4096];
+            int read;
+            try
+            {
+                while ((read = fsIn.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    zaszyfrowanyText.Text = sr.ReadToEnd();
+                    cs.Write(buffer, 0, read);
+                }
+            }
+            catch (CryptographicException ex)
+            {
+                MessageBox.Show("Błąd szyfrowania DES: " + ex.Message);
+            }
+            finally
+            {
+                cs.Close();
+                fs.Close();
+                fsIn.Close();
+
+                MessageBox.Show("Plik został zaszyfrowany jako: " + localLink);
+            }
+        }
+
+        private void btnDeszyfrDES_Click(object sender, EventArgs e)
+        {
+            string encryptedFile = szukajOknoText.Text;
+            if (!File.Exists(encryptedFile))
+            {
+                MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
+                return;
+            }
+
+            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
+            {
+                byte[] salt = new byte[32];
+                fsIn.Read(salt, 0, salt.Length);
+
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(_password);
+
+                DESCryptoServiceProvider des = new DESCryptoServiceProvider
+                {
+                    KeySize = 64,
+                    BlockSize = 64,
+                    Padding = PaddingMode.PKCS7,
+                    Mode = CipherMode.CFB
+                };
+
+                byte[] key = passwordBytes.Take(8).ToArray();
+                des.Key = key;
+                des.IV = key;
+
+                string decryptedFile = encryptedFile.Replace(".des", "");
+
+                using (CryptoStream cs = new CryptoStream(fsIn, des.CreateDecryptor(), CryptoStreamMode.Read))
+                using (FileStream fsOut = new FileStream(decryptedFile, FileMode.Create))
+                {
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    try
+                    {
+                        while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            fsOut.Write(buffer, 0, read);
+                        }
+
+                        MessageBox.Show("Plik został odszyfrowany jako: " + decryptedFile);
+                    }
+                    catch (CryptographicException ex)
+                    {
+                        MessageBox.Show("Błąd deszyfrowania DES: " + ex.Message);
+                    }
                 }
             }
         }
+
     }
 }

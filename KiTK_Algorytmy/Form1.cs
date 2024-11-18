@@ -17,14 +17,36 @@ namespace KiTK_Algorytmy
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void loadform(object Form)
         {
-
+            if (this.mainpanel.Controls.Count > 0)
+                this.mainpanel.Controls.RemoveAt(0);
+            Form f = Form as Form;
+            f.TopLevel = false;
+            f.Dock = DockStyle.Fill;
+            this.mainpanel.Controls.Add(f);
+            this.mainpanel.Tag = f;
+            f.Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            loadform(new dashboardform());
+        }
 
+        private void btnSzyfr_Click(object sender, EventArgs e)
+        {
+            loadform(new algorytmyform());
+        }
+
+        private void btnAlgor_Click(object sender, EventArgs e)
+        {
+            loadform(new szyfrowanieform());
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

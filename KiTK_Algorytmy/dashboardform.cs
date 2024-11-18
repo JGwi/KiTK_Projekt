@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace KiTK_Algorytmy
 {
-    public partial class dashboard : Form
+    public partial class dashboardform : Form
     {
-        public dashboard()
+        public dashboardform()
         {
             InitializeComponent();
         }

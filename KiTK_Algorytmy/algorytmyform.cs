@@ -101,5 +101,71 @@ namespace KiTK_Algorytmy
             }
             return data;
         }
+
+        private void btnDeszyfrAES_Click(object sender, EventArgs e)
+        {
+            string encryptedFile = szukajOknoText.Text;
+
+            if (!File.Exists(encryptedFile))
+            {
+                MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
+                return;
+            }
+
+            string decryptedFile = Path.ChangeExtension(encryptedFile, ".decrypted");
+
+            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open)) ;
+
+            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
+            {
+                byte[] salt = new byte[32];
+                fsIn.Read(salt, 0, salt.Length);
+
+                byte[] passwordBytes = Encoding.Unicode.GetBytes(_password);
+                RijndaelManaged aes = new RijndaelManaged
+                {
+                    KeySize = 256,
+                    BlockSize = 128,
+                    Padding = PaddingMode.PKCS7,
+                    Mode = CipherMode.CFB
+                };
+
+                var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
+                aes.Key = key.GetBytes(aes.KeySize / 8);
+                aes.IV = key.GetBytes(aes.BlockSize / 8);
+
+                using (CryptoStream cs = new CryptoStream(fsIn, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                using (FileStream fsOut = new FileStream(decryptedFile, FileMode.Create))
+                {
+                    byte[] buffer = new byte[108576];
+                    int read;
+                    try
+                    {
+                        while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            fsOut.Write(buffer, 0, read);
+                        }
+
+                        MessageBox.Show("Plik został pomyślnie odszyfrowany jako: " + decryptedFile);
+                    }
+                    catch (CryptographicException ex)
+                    {
+                        MessageBox.Show("Błąd deszyfrowania: " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Nieoczekiwany błąd: " + ex.Message);
+                    }
+                }
+
+            }
+            if(File.Exists(decryptedFile))
+            {
+                using (StreamReader sr = new StreamReader(decryptedFile))
+                {
+                    zaszyfrowanyText.Text = sr.ReadToEnd();
+                }
+            }
+        }
     }
 }

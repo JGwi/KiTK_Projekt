@@ -105,6 +105,7 @@
             this.btnDeszyfrAES.TabIndex = 11;
             this.btnDeszyfrAES.Text = "Deszyfruj AES\r\nTryb blokowy";
             this.btnDeszyfrAES.UseVisualStyleBackColor = false;
+            this.btnDeszyfrAES.Click += new System.EventHandler(this.btnDeszyfrAES_Click);
             // 
             // btnSzukaj
             // 

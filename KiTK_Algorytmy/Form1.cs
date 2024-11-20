@@ -36,12 +36,12 @@ namespace KiTK_Algorytmy
 
         private void btnSzyfr_Click(object sender, EventArgs e)
         {
-            loadform(new algorytmyform());
+            loadform(new szyfrowanieform());
         }
 
         private void btnAlgor_Click(object sender, EventArgs e)
         {
-            loadform(new szyfrowanieform());
+            loadform(new algorytmyform());
         }
 
         private void btnClose_Click(object sender, EventArgs e)

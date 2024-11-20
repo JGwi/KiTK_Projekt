@@ -308,6 +308,130 @@ namespace KiTK_Algorytmy
             }
         }
 
+        private void btnSzyfrStrAES_Click(object sender, EventArgs e)
+        {
+            string inputFile = szukajOknoText.Text;
+            if (!File.Exists(inputFile))
+            {
+                MessageBox.Show("Nie znaleziono pliku do szyfrowania.");
+                return;
+            }
 
+            string outputFile = Path.ChangeExtension(inputFile, ".aes");
+
+            byte[] key = Encoding.UTF8.GetBytes(_password.PadRight(32, '0').Substring(0, 32));
+            byte[] iv = GenerateSalt().Take(16).ToArray();
+
+            try
+            {
+                using (FileStream fsInput = new FileStream(inputFile, FileMode.Open))
+                using (FileStream fsOutput = new FileStream(outputFile, FileMode.Create))
+                {
+                    // Zapis IV na początku zaszyfrowanego pliku
+                    fsOutput.Write(iv, 0, iv.Length);
+
+                    using (Aes aes = Aes.Create())
+                    {
+                        aes.Key = key;
+                        aes.IV = iv;
+                        aes.Mode = CipherMode.CFB; // Tryb strumieniowy
+                        aes.Padding = PaddingMode.PKCS7;
+
+                        using (CryptoStream cs = new CryptoStream(fsOutput, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                        {
+                            byte[] buffer = new byte[4096];
+                            int read;
+
+                            // Szyfrowanie strumieniowe
+                            while ((read = fsInput.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                cs.Write(buffer, 0, read);
+                            }
+                        }
+                    }
+                }
+
+                MessageBox.Show("Plik został zaszyfrowany jako: " + outputFile);
+                zaszyfrowanyText.Text = "Plik zapisany jako: " + outputFile;
+            }
+            catch (CryptographicException ex)
+            {
+                MessageBox.Show("Błąd szyfrowania AES w trybie strumieniowym: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nieoczekiwany błąd: " + ex.Message);
+            }
+        }
+
+        private void btnDeszyfrStrAES_Click(object sender, EventArgs e)
+        {
+            string encryptedFile = szukajOknoText.Text;
+
+            // Sprawdź, czy plik istnieje
+            if (!File.Exists(encryptedFile))
+            {
+                MessageBox.Show("Nie znaleziono pliku do odszyfrowania.");
+                return;
+            }
+
+            // Odczytaj zaszyfrowany plik
+            using (FileStream fsIn = new FileStream(encryptedFile, FileMode.Open))
+            {
+                byte[] salt = new byte[32];
+                fsIn.Read(salt, 0, salt.Length); // Odczytaj sól
+
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(_password);
+
+                // Ustawienia AES
+                using (Aes aes = Aes.Create())
+                {
+                    aes.KeySize = 256;
+                    aes.BlockSize = 128;
+                    aes.Padding = PaddingMode.PKCS7; // Dodano PaddingMode
+                    aes.Mode = CipherMode.CFB;
+
+                    var key = new Rfc2898DeriveBytes(passwordBytes, salt, 10000);
+                    aes.Key = key.GetBytes(aes.KeySize / 8);
+                    aes.IV = key.GetBytes(aes.BlockSize / 8);
+
+                    // Zmienna do przechowania nazwy odszyfrowanego pliku
+                    string decryptedFile = Path.ChangeExtension(encryptedFile, null); // Przywróć oryginalne rozszerzenie
+
+                    using (CryptoStream cs = new CryptoStream(fsIn, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                    using (FileStream fsOut = new FileStream(decryptedFile, FileMode.Create))
+                    {
+                        byte[] buffer = new byte[4096];
+                        int read;
+                        try
+                        {
+                            while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                fsOut.Write(buffer, 0, read);
+                            }
+
+                            MessageBox.Show("Plik został odszyfrowany jako: " + decryptedFile);
+
+                            // Wyświetl odszyfrowany tekst w oknie RichTextBox
+                            if (Path.GetExtension(decryptedFile).ToLower() == ".txt")
+                            {
+                                using (StreamReader sr = new StreamReader(decryptedFile))
+                                {
+                                    tekstPlikText.Text = sr.ReadToEnd();
+                                }
+                            }
+                        }
+                        catch (CryptographicException ex)
+                        {
+                            MessageBox.Show("Błąd deszyfrowania AES w trybie strumieniowym: " + ex.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Nieoczekiwany błąd: " + ex.Message);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

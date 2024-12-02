@@ -38,7 +38,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label1.Location = new System.Drawing.Point(181, 179);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(438, 92);
+            this.label1.Size = new System.Drawing.Size(421, 90);
             this.label1.TabIndex = 3;
             this.label1.Text = "Kryptografia i teoria kodów \r\n| Szyfrowanie";
             // 

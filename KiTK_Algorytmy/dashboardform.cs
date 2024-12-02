@@ -16,5 +16,10 @@ namespace KiTK_Algorytmy
         {
             InitializeComponent();
         }
+
+        private void dashboardform_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

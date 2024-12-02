@@ -48,5 +48,10 @@ namespace KiTK_Algorytmy
         {
             Application.Exit();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            loadform(new podpiscyfrowy());
+        }
     }
 }

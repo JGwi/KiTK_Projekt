@@ -34,8 +34,5 @@ W pliku **KiTK_Dokumentacja.pdf** znajduje się szczegółowa dokumentacja techn
 3. Zapoznaj się z interfejsem graficznym aplikacji, który pozwala na wybór odpowiednich opcji szyfrowania, kompresji lub weryfikacji podpisu cyfrowego.
 4. Użyj interfejsu, aby wprowadzić pliki, wybrać odpowiednie algorytmy i przeprowadzić potrzebne operacje.
 
-## Kontakt
-
-Jeśli masz pytania dotyczące aplikacji lub potrzebujesz pomocy, skontaktuj się z nami na adres e-mail: gwizdzjakub2@gmail.com
 
 Dziękuje za korzystanie z aplikacji!

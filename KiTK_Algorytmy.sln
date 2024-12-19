@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KiTK_Algorytmy", "KiTK_Algorytmy\KiTK_Algorytmy.csproj", "{22D6C9E4-E561-421B-8DA4-3AE02C17F7DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Szyfrowanie.nUnitTests", "Szyfrowanie.nUnitTests\Szyfrowanie.nUnitTests.csproj", "{9B70D832-C6C0-481F-8887-16436B11E7BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{22D6C9E4-E561-421B-8DA4-3AE02C17F7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22D6C9E4-E561-421B-8DA4-3AE02C17F7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22D6C9E4-E561-421B-8DA4-3AE02C17F7DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B70D832-C6C0-481F-8887-16436B11E7BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B70D832-C6C0-481F-8887-16436B11E7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B70D832-C6C0-481F-8887-16436B11E7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B70D832-C6C0-481F-8887-16436B11E7BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

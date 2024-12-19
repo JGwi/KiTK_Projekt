@@ -105,6 +105,7 @@
             this.btnSelectFile.TabIndex = 18;
             this.btnSelectFile.Text = "Wybierz plik";
             this.btnSelectFile.UseVisualStyleBackColor = false;
+            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
             // 
             // cmbHashAlgorithm
             // 
@@ -197,6 +198,7 @@
             this.btnSelectCertificate.TabIndex = 30;
             this.btnSelectCertificate.Text = "Wybierz certyfikat\r\n";
             this.btnSelectCertificate.UseVisualStyleBackColor = false;
+            this.btnSelectCertificate.Click += new System.EventHandler(this.btnSelectCertificate_Click);
             // 
             // txtCertificatePath
             // 
@@ -231,6 +233,7 @@
             this.btnAnalyzeCertificate.TabIndex = 31;
             this.btnAnalyzeCertificate.Text = "Analizuj certyfikat\r\n";
             this.btnAnalyzeCertificate.UseVisualStyleBackColor = false;
+            this.btnAnalyzeCertificate.Click += new System.EventHandler(this.btnAnalyzeCertificate_Click);
             // 
             // rtbCertificateDetails
             // 

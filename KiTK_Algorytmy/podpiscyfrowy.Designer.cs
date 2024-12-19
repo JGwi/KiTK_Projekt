@@ -239,7 +239,7 @@
             // 
             this.rtbCertificateDetails.Location = new System.Drawing.Point(635, 234);
             this.rtbCertificateDetails.Name = "rtbCertificateDetails";
-            this.rtbCertificateDetails.Size = new System.Drawing.Size(401, 75);
+            this.rtbCertificateDetails.Size = new System.Drawing.Size(401, 150);
             this.rtbCertificateDetails.TabIndex = 32;
             this.rtbCertificateDetails.Text = "";
             // 
@@ -255,16 +255,16 @@
             // 
             // treeCertificateChain
             // 
-            this.treeCertificateChain.Location = new System.Drawing.Point(634, 387);
+            this.treeCertificateChain.Location = new System.Drawing.Point(633, 456);
             this.treeCertificateChain.Name = "treeCertificateChain";
-            this.treeCertificateChain.Size = new System.Drawing.Size(401, 319);
+            this.treeCertificateChain.Size = new System.Drawing.Size(401, 250);
             this.treeCertificateChain.TabIndex = 34;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.label8.Location = new System.Drawing.Point(638, 362);
+            this.label8.Location = new System.Drawing.Point(630, 433);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(147, 20);
             this.label8.TabIndex = 35;
@@ -278,7 +278,7 @@
             this.btnValidateCertificate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btnValidateCertificate.ForeColor = System.Drawing.Color.White;
             this.btnValidateCertificate.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnValidateCertificate.Location = new System.Drawing.Point(634, 317);
+            this.btnValidateCertificate.Location = new System.Drawing.Point(633, 393);
             this.btnValidateCertificate.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.btnValidateCertificate.Name = "btnValidateCertificate";
             this.btnValidateCertificate.Size = new System.Drawing.Size(400, 40);

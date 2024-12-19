@@ -8,14 +8,13 @@ namespace KiTK_Algorytmy
 {
     public partial class podpiscyfrowy : Form
     {
-        private readonly string _secretKey = "KluczSymetryczny123"; // Przykładowy klucz symetryczny (do zmiany na bezpieczniejszy)
+        private readonly string _secretKey = "KluczSymetryczny123"; 
 
         public podpiscyfrowy()
         {
             InitializeComponent();
         }
 
-        // Obsługa przycisku "Generuj podpis"
         private void btnGenerateSignature_Click(object sender, EventArgs e)
         {
             string filePath = txtFilePath.Text; // Ścieżka do pliku PDF
@@ -27,20 +26,16 @@ namespace KiTK_Algorytmy
 
             try
             {
-                // 1. Generowanie funkcji skrótu
                 byte[] fileHash = GenerateFileHash(filePath);
                 cmbHashAlgorithm.Text = BitConverter.ToString(fileHash).Replace("-", ""); // Wyświetlenie funkcji skrótu w TextBox
 
-                // 2. Szyfrowanie funkcji skrótu (generowanie podpisu cyfrowego)
                 byte[] signature = EncryptHash(fileHash, _secretKey);
 
-                // 3. Zapis podpisu cyfrowego do pliku
                 string signatureFile = Path.ChangeExtension(filePath, ".signature");
                 File.WriteAllBytes(signatureFile, signature);
 
                 MessageBox.Show($"Podpis cyfrowy wygenerowany i zapisany jako: {signatureFile}", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Opcjonalnie: wyświetlenie podpisu cyfrowego w TextBox
                 rtbSignatureOutput.Text = BitConverter.ToString(signature).Replace("-", "");
             }
             catch (Exception ex)
@@ -49,7 +44,6 @@ namespace KiTK_Algorytmy
             }
         }
 
-        // Funkcja generująca funkcję skrótu (SHA-256)
         private byte[] GenerateFileHash(string filePath)
         {
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -61,7 +55,6 @@ namespace KiTK_Algorytmy
 
 
 
-        // Funkcja szyfrująca funkcję skrótu kluczem symetrycznym (AES)
         private byte[] EncryptHash(byte[] hash, string secretKey)
         {
             using (Aes aes = Aes.Create())

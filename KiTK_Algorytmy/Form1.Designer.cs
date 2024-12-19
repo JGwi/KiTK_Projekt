@@ -37,8 +37,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnSzyfr = new System.Windows.Forms.Button();
             this.btnAlgor = new System.Windows.Forms.Button();
-            this.mainpanel = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
+            this.mainpanel = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -101,6 +102,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnSzyfr);
             this.flowLayoutPanel1.Controls.Add(this.btnAlgor);
             this.flowLayoutPanel1.Controls.Add(this.button2);
+            this.flowLayoutPanel1.Controls.Add(this.button3);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 50);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -168,15 +170,6 @@
             this.btnAlgor.UseVisualStyleBackColor = false;
             this.btnAlgor.Click += new System.EventHandler(this.btnAlgor_Click);
             // 
-            // mainpanel
-            // 
-            this.mainpanel.BackColor = System.Drawing.SystemColors.Control;
-            this.mainpanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainpanel.Location = new System.Drawing.Point(272, 50);
-            this.mainpanel.Name = "mainpanel";
-            this.mainpanel.Size = new System.Drawing.Size(1094, 718);
-            this.mainpanel.TabIndex = 2;
-            // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(29)))));
@@ -196,6 +189,35 @@
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // mainpanel
+            // 
+            this.mainpanel.BackColor = System.Drawing.SystemColors.Control;
+            this.mainpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainpanel.Location = new System.Drawing.Point(272, 50);
+            this.mainpanel.Name = "mainpanel";
+            this.mainpanel.Size = new System.Drawing.Size(1094, 718);
+            this.mainpanel.TabIndex = 2;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(29)))));
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(0, 215);
+            this.button3.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.button3.Name = "button3";
+            this.button3.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.button3.Size = new System.Drawing.Size(270, 40);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "        Hamingien i Huffman";
+            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
@@ -229,6 +251,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel mainpanel;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
 

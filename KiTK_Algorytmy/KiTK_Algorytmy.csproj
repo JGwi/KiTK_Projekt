@@ -64,6 +64,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HuffmanHamingienForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HuffmanHamingienForm.Designer.cs">
+      <DependentUpon>HuffmanHamingienForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="podpiscyfrowy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HuffmanHamingienForm.resx">
+      <DependentUpon>HuffmanHamingienForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="podpiscyfrowy.resx">
       <DependentUpon>podpiscyfrowy.cs</DependentUpon>
